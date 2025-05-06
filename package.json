@@ -1,24 +1,33 @@
 {
   "name": "labellink",
-  "productName": "labellink",
+  "productName": "EtiqScan",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "Sistema de Etiquetagem Industrial para leitura e impressão de etiquetas",
   "main": "src/index.js",
   "scripts": {
     "start": "electron-forge start",
+    "dev": "electron .",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "echo \"No linting configured\""
+    "build": "electron-builder",
+    "lint": "echo \"No linting configured\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": {
-    "name": "DaggerFn",
-    "email": "143975774+DaggerFn@users.noreply.github.com"
-  },
+  "keywords": [
+    "etiquetas",
+    "zebra",
+    "qrcode",
+    "zpl",
+    "industrial",
+    "labellink",
+    "etiqscan"
+  ],
+  "author": "Seu Nome <seu.email@empresa.com>",
   "license": "MIT",
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.1"
+    "electron-squirrel-startup": "^1.0.1",
+    "qrcode": "^1.5.3"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.8.0",
@@ -26,9 +35,50 @@
     "@electron-forge/maker-rpm": "^7.8.0",
     "@electron-forge/maker-squirrel": "^7.8.0",
     "@electron-forge/maker-zip": "^7.8.0",
-    "@electron-forge/plugin-auto-unpack-natives": "^7.8.0",
-    "@electron-forge/plugin-fuses": "^7.8.0",
-    "@electron/fuses": "^1.8.0",
-    "electron": "36.1.0"
+    "@electron-forge/plugin-webpack": "^7.8.0",
+    "electron": "^36.1.0",
+    "electron-builder": "^24.6.4",
+    "electron-squirrel-startup": "^1.0.1"
+  },
+  "build": {
+    "appId": "com.empresa.etiqscan",
+    "productName": "EtiqScan",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "assets/icon.icns"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "assets/icon.png"
+    }
+  },
+  "config": {
+    "forge": {
+      "plugins": [
+        [
+          "@electron-forge/plugin-webpack",
+          {
+            "mainConfig": "webpack.main.config.js",
+            "renderer": {
+              "config": "webpack.renderer.config.js",
+              "entryPoints": [
+                {
+                  "html": "src/index.html",
+                  "js": "src/renderer.js",
+                  "name": "main_window"
+                }
+              ]
+            }
+          }
+        ]
+      ]
+    }
   }
 }
